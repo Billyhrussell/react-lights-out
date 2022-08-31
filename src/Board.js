@@ -33,12 +33,30 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
     let initialBoard = [];
-    // TODO: create array-of-arrays of true/false values
+
+    for(let row = 0; row < nrows; row++){
+      let rows = [];
+      for(let col = 0; col < ncols; col++){
+        let percent = Math.random();
+        //false
+        if(percent >= chanceLightStartsOn){
+          rows.push(0);
+        //true
+        } else{
+          rows.push(1);
+        }
+      }
+      initialBoard.push(rows);
+    }
     return initialBoard;
   }
 
-  function hasWon() {
-    // TODO: check the board in state to determine whether the player has won.
+  function hasWon(boardPieces) {
+     const lights = boardPieces.filter(c => c.includes(1));
+     if(lights.length > 0){
+       return false;
+     }
+     return true;
   }
 
   function flipCellsAround(coord) {
@@ -53,11 +71,16 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
         }
       };
 
-      // TODO: Make a (deep) copy of the oldBoard
+      //TODO: do we need to use spread operator?
+      let newBoard = oldBoard.map(val => val);
 
-      // TODO: in the copy, flip this cell and the cells around it
+      flipCell(y, x, newBoard);
+      flipCell(y + 1, x, newBoard);
+      flipCell(y - 1, x, newBoard);
+      flipCell(y, x + 1, newBoard);
+      flipCell(y, x - 1, newBoard);
 
-      // TODO: return the copy
+      return newBoard;
     });
   }
 
