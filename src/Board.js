@@ -34,15 +34,15 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   function createBoard() {
     let initialBoard = [];
 
-    for(let row = 0; row < nrows; row++){
+    for (let row = 0; row < nrows; row++) {
       let rows = [];
-      for(let col = 0; col < ncols; col++){
+      for (let col = 0; col < ncols; col++) {
         let percent = Math.random();
         //false
-        if(percent >= chanceLightStartsOn){
+        if (percent >= chanceLightStartsOn) {
           rows.push(0);
-        //true
-        } else{
+          //true
+        } else {
           rows.push(1);
         }
       }
@@ -52,11 +52,11 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   }
 
   function hasWon(boardPieces) {
-     const lights = boardPieces.filter(c => c.includes(1));
-     if(lights.length > 0){
-       return false;
-     }
-     return true;
+    const lights = boardPieces.filter(c => c.includes(1));
+    if (lights.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   function flipCellsAround(coord) {
@@ -72,7 +72,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       };
 
       //TODO: do we need to use spread operator?
-      let newBoard = oldBoard.map(val => val);
+      let newBoard = oldBoard.map(val => [...val]);
 
       flipCell(y, x, newBoard);
       flipCell(y + 1, x, newBoard);
@@ -84,13 +84,57 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     });
   }
 
-  // if the game is won, just show a winning msg & render nothing else
+  // [0, 1, 0, 0]
+  // [0, 0, 1, 0]
+  // [0, 1, 0, 0]
 
-  // TODO
 
-  // make table board
+  // const htmlBoard =
+  //   board.map((row, y) => row.map(row, x) =>
+  // <Cell flipCellsAroundMe={flipCellsAround} isLit={board[y][x]} id={y-x} />);
+  // let finalBoard = [];
 
-  // TODO
+  // for (let y = 0; y < board.length; y++) {
+  //   let row = [];
+  //   for (let x = 0; x < board[y].length; x++) {
+  //     row.push(
+  //       <Cell flipCellsAroundMe={flipCellsAround} isLit={board[y][x]} id={y - x} />
+  //     );
+  //   };
+  //   finalBoard.push(row);
+  // }
+
+  let tblBoard = [];
+
+  for (let y = 0; y < nrows; y++) {
+    let row = [];
+    for (let x = 0; x < ncols; x++) {
+      let coord = `${y}-${x}`;
+      row.push(
+          <Cell
+              key={coord}
+              isLit={board[y][x]}
+              flipCellsAroundMe={evt => flipCellsAround(coord)}
+          />,
+      );
+    }
+    tblBoard.push(<tr key={y}>{row}</tr>);
+  }
+
+  return (
+    // if the game is won, just show a winning msg & render nothing else
+    // TODO
+    // make table board
+    // TODO
+    // <div>
+    //    { hasWon(board) && <p>You've WON</p> }
+    //    { !hasWon(board) && {finalBoard}}
+    // </div>
+
+    <table className="Board">
+      <tbody>{tblBoard}</tbody>
+    </table>
+  );
 }
 
 export default Board;
